@@ -1,0 +1,5 @@
+node_modules
+.git
+*.cpp
+*.txt
+build/

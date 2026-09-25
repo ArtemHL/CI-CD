@@ -3,8 +3,20 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start server and run tests
+        run: |
+          node server.js &
+          sleep 1
+          node test.js
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,12 +26,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: artemhl/pingpong:${{ github.sha }}
+
       - name: Deploy to k3s
         uses: appleboy/ssh-action@v1
         with:
@@ -28,4 +42,3 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo k3s kubectl set image deployment/pingpong pingpong=artemhl/pingpong:${{ github.sha }}
-  

@@ -33,12 +33,3 @@ jobs:
           context: .
           push: true
           tags: artemhl/pingpong:${{ github.sha }}
-
-      - name: Deploy to k3s
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            sudo k3s kubectl set image deployment/pingpong pingpong=artemhl/pingpong:${{ github.sha }}

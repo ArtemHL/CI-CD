@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: pingpong
-        image: artemhl/pingpong:v1
+        image: artemhl/pingpong:4985260e98f0bb0da7e8208aac6076dff94c678c
         ports:
         - containerPort: 8080
         readinessProbe:

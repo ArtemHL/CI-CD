@@ -33,3 +33,13 @@ jobs:
           context: .
           push: true
           tags: artemhl/pingpong:${{ github.sha }}
+
+      - name: Update image tag in k8s/deployment.yaml
+        run: |
+          sed -i "s|image: artemhl/pingpong:.*|image: artemhl/pingpong:${{ github.sha }}|" k8s/deployment.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add k8s/deployment.yaml
+          git commit -m "deploy: pingpong ${{ github.sha }}"
+          git pull --rebase
+          git push

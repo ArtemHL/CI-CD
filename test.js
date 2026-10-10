@@ -19,9 +19,9 @@ function check(path, expected) {
 }
 
 Promise.all([
-  check('/', 'pong'),
-  check('/health', 'ok'),
-  check('/bestProgrammer', 'ArtemHl')
+  check('/api', 'pong'),
+  check('/api/health', 'ok'),
+  check('/api/bestProgrammer', 'ArtemHl')
 ])
   .then(() => process.exit(0))
   .catch(() => process.exit(1));

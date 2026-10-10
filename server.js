@@ -1,11 +1,11 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-    if (req.url === '/health') {
+    if (req.url === '/api/health') {
         res.writeHead(200, { 'Content-Type': 'text/plain' })
         res.end('ok');
     }
-    else if (req.url === '/bestProgrammer') {
+    else if (req.url === '/api/bestProgrammer') {
         res.writeHead(200, { 'Content-Type': 'text/plain' })
         res.end('ArtemHl');
     } else {

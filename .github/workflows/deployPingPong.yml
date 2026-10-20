@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'apps/pingpong/**'
+      - 'charts/webapp/**'
       - '.github/workflows/deployPingPong.yml'
   workflow_dispatch:
 
@@ -45,9 +46,12 @@ jobs:
           ref: deploy
           path: deploy-branch
 
-      - name: Publish manifests to the deploy branch
+      - name: Publish chart, values and tag to the deploy branch
         run: |
           mkdir -p deploy-branch/pingpong
+          rm -rf deploy-branch/charts
+          cp -r charts deploy-branch/charts
+          cp apps/pingpong/values.yaml deploy-branch/pingpong/values.yaml
           touch deploy-branch/pingpong/tag.yaml
           yq -i '.image.tag = "${{ github.sha }}"' deploy-branch/pingpong/tag.yaml
           cd deploy-branch

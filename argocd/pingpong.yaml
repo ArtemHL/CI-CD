@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pingpong
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ArtemHL/CI-CD.git
+    targetRevision: deploy
+    path: charts/webapp
+    helm:
+      releaseName: pingpong
+      valueFiles:
+        - ../../pingpong/values.yaml
+        - ../../pingpong/tag.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

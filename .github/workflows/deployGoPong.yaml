@@ -4,7 +4,8 @@ on:
     branches: [main]
     paths:
       - 'apps/gopong/**'
-      - '.github/workflows/deployGoPong.yml'
+      - 'charts/webapp/**'
+      - '.github/workflows/deployGoPong.yaml'
   workflow_dispatch:
 
 jobs:
@@ -45,9 +46,12 @@ jobs:
           ref: deploy
           path: deploy-branch
 
-      - name: Publish manifests to the deploy branch
+      - name: Publish chart, values and tag to the deploy branch
         run: |
           mkdir -p deploy-branch/gopong
+          rm -rf deploy-branch/charts
+          cp -r charts deploy-branch/charts
+          cp apps/gopong/values.yaml deploy-branch/gopong/values.yaml
           touch deploy-branch/gopong/tag.yaml
           yq -i '.image.tag = "${{ github.sha }}"' deploy-branch/gopong/tag.yaml
           cd deploy-branch

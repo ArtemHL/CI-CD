@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Start server and run tests
-        run: |
-          go run apps/gopong/main.go &
-          sleep 1
-          go run apps/gopong/main_test.go
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/gopong/go.mod
+      - name: Run tests
+        working-directory: apps/gopong
+        run: go test ./...
 
   deploy:
     needs: test

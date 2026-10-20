@@ -1,8 +1,8 @@
-namespace: pingpong
+namespace: gopong
 replicas: 2
 
 image:
-  repository: artemhl/pingpong
+  repository: artemhl/gopong
 
 port: 8080
 

@@ -1,3 +1,4 @@
+namespace: pingpong
 replicas: 2
 
 image:

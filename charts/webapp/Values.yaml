@@ -1,3 +1,4 @@
+namespace: default
 replicas: 1
 
 probe:

@@ -1,0 +1,14 @@
+namespace: pingpong
+replicas: 2
+
+image:
+  repository: artemhl/pingpong
+
+port: 8080
+
+probe:
+  path: /api/go/health
+
+ingress:
+  enabled: true
+  path: /api/go

@@ -6,6 +6,9 @@ image:
 
 port: 8080
 
+probe:
+  path: /api/node/health
+
 ingress:
   enabled: true
-  path: /api
+  path: /api/node

@@ -1,0 +1,59 @@
+name: Deploy GoPong
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/gopong/**'
+      - '.github/workflows/deployGoPong.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start server and run tests
+        run: |
+          node apps/gopong/server.js &
+          sleep 1
+          node apps/gopong/test.js
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/gopong
+          push: true
+          tags: artemhl/gopong:${{ github.sha }}
+
+      - uses: 
+          actions/checkout@v4
+        with:
+          ref: deploy
+          path: deploy-branch
+
+      - name: Publish manifests to the deploy branch
+        run: |
+          mkdir -p deploy-branch/gopong
+          touch deploy-branch/gopong/tag.yaml
+          yq -i '.image.tag = "${{ github.sha }}"' deploy-branch/gopong/tag.yaml
+          cd deploy-branch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "deploy: gopong ${{ github.sha }}"
+          git pull --rebase
+          git push

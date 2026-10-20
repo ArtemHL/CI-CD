@@ -2,6 +2,9 @@ name: Deploy pingpong
 on:
   push:
     branches: [main]
+    paths:
+      - 'apps/pingpong/**'
+      - '.github/workflows/deployPingPong.yml'
   workflow_dispatch:
 
 jobs:
@@ -11,9 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Start server and run tests
         run: |
-          node server.js &
+          node apps/pingpong/server.js &
           sleep 1
-          node test.js
+          node apps/pingpong/test.js
 
   deploy:
     needs: test
@@ -32,20 +35,21 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./apps/pingpong
           push: true
           tags: artemhl/pingpong:${{ github.sha }}
 
-      - uses: actions/checkout@v4
+      - uses: 
+          actions/checkout@v4
         with:
           ref: deploy
           path: deploy-branch
 
       - name: Publish manifests to the deploy branch
         run: |
-          rm -rf deploy-branch/k8s
-          cp -r k8s deploy-branch/k8s
-          sed -i "s|image: artemhl/pingpong:.*|image: artemhl/pingpong:${{ github.sha }}|" deploy-branch/k8s/deployment.yaml
+          mkdir -p deploy-branch/pingpong
+          touch deploy-branch/pingpong/tag.yaml
+          yq -i '.image.tag = "${{ github.sha }}"' deploy-branch/pingpong/tag.yaml
           cd deploy-branch
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

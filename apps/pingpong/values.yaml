@@ -1,0 +1,22 @@
+replicas: 2
+
+image:
+  repository: artemhl/pingpong
+  tag: ""
+
+port: 8080
+
+probe:
+  enabled: true
+  path: /health
+  initialDelaySeconds: 2
+  periodSeconds: 5
+
+strategy: {}
+
+resources: {}
+
+ingress:
+  enabled: true
+  targetPort: 8080
+  path: /

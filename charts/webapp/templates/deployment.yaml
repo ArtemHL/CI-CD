@@ -21,6 +21,9 @@ spec:
       containers:
         - name: {{ .Release.Name }}
           image: "{{ required "image.repository is required" .Values.image.repository }}:{{ required "image.tag is required" .Values.image.tag }}"
+          env:
+            - name: BASE_PATH
+              value: {{ .Values.ingress.path | quote }}
           ports:
             - containerPort: {{ .Values.port }}
           {{- if .Values.probe.enabled }}

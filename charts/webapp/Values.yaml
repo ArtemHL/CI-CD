@@ -1,0 +1,11 @@
+replicas: 1
+
+probe:
+  enabled: true
+  path: /health
+  initialDelaySeconds: 2
+  periodSeconds: 5
+
+ingress:
+  enabled: false
+  path: /

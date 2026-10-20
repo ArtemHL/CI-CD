@@ -1,0 +1,21 @@
+replicas: 1
+
+image:
+  repository: ""
+  tag: ""
+
+port: 8080
+
+probe:
+  enabled: true
+  path: /health
+  initialDelaySeconds: 2
+  periodSeconds: 5
+
+strategy: {}
+
+resources: {}
+
+ingress:
+  enabled: false
+  path: /

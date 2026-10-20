@@ -10,7 +10,7 @@ import (
 
 func TestPing(t *testing.T) {
 	path := os.Getenv("BASE_PATH")
-	req := httptest.NewRequest(http.MethodGet, path+"/ping", nil)
+	req := httptest.NewRequest(http.MethodGet, path+"/", nil)
 	rec := httptest.NewRecorder()
 
 	newMux().ServeHTTP(rec, req)

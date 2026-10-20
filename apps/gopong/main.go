@@ -16,7 +16,7 @@ func newMux() *http.ServeMux {
 	path := os.Getenv("BASE_PATH")
 	mux := http.NewServeMux()
 
-	mux.HandleFunc(path+"/ping", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(path+"/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "pong")
 	})
 

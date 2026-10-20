@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Start server and run tests
         run: |
-          node apps/gopong/server.js &
+          go run apps/gopong/main.go &
           sleep 1
-          node apps/gopong/test.js
+          go run apps/gopong/main_test.go
 
   deploy:
     needs: test

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gopong
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ArtemHL/CI-CD.git
+    targetRevision: deploy
+    path: charts/webapp
+    helm:
+      releaseName: gopong
+      valueFiles:
+        - ../../gopong/values.yaml
+        - ../../gopong/tag.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gopong
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true

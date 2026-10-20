@@ -16,8 +16,10 @@ spec:
         - ../../pingpong/tag.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: pingpong
   syncPolicy:
     automated:
       prune: false
       selfHeal: false
+    syncOptions:
+      - CreateNamespace=true

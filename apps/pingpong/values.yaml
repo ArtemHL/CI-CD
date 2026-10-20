@@ -3,6 +3,8 @@ replicas: 2
 image:
   repository: artemhl/pingpong
 
+port: 8080
+
 ingress:
   enabled: true
   path: /api

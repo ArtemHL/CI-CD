@@ -14,8 +14,13 @@ probe:
 
 strategy: {}
 
-resources: {}
-
 ingress:
   enabled: false
   path: /
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 128Mi

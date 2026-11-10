@@ -36,8 +36,8 @@ spec:
                       storage: 5Gi
         grafana:
           resources:
-            requests: { cpu: 50m, memory: 128Mi }
-            limits: { memory: 256Mi }
+            requests: { cpu: 50m, memory: 512Mi }
+            limits: { memory: 1Gi }
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

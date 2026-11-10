@@ -34,16 +34,35 @@ spec:
                   resources:
                     requests:
                       storage: 5Gi
+        additionalPrometheusRulesMap:
+          practice-disk:
+            groups:
+              - name: practice.disk
+                rules:
+                  - alert: RootDiskAlmostFull
+                    expr: 100 * (1 - node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) > 80
+                    for: 10m
+                    labels:
+                      severity: warning
+                    annotations:
+                      summary: "Root disk {{ $value | printf \"%.0f\" }}% full on {{ $labels.instance }}"
+                  - alert: RootDiskFillsWithin4h
+                    expr: predict_linear(node_filesystem_avail_bytes{mountpoint="/"}[6h], 4 * 3600) < 0
+                    for: 30m
+                    labels:
+                      severity: critical
+                    annotations:
+                      summary: "Root disk on {{ $labels.instance }} is predicted to fill within 4 hours"  
         grafana:
           resources:
-            requests: { cpu: 50m, memory: 512Mi }
+            requests: { cpu: 50m, memory: 256Mi }
             limits: { memory: 1Gi }
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: false
     syncOptions:
       - CreateNamespace=true

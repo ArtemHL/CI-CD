@@ -7,3 +7,7 @@ spec:
   valuesContent: |-
     deployment:
       replicas: 2
+    logs:
+      access:
+        enabled: true
+        format: json

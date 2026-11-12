@@ -27,9 +27,12 @@ spec:
           exporters:
             debug:
               verbosity: basic
-        resources:
-          requests: { cpu: 50m, memory: 128Mi }
-          limits: { memory: 256Mi }
+            elasticsearch:
+              endpoints: ["http://172.31.41.72:9200"]
+          service:
+            pipelines:
+              logs:
+                exporters: [debug, elasticsearch]
     
   destination:
     server: https://kubernetes.default.svc

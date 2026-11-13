@@ -11,4 +11,4 @@ probe:
 
 ingress:
   enabled: true
-  path: /api/js
+  path: /api/node

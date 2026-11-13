@@ -1,5 +1,6 @@
 const http = require('http');
 
+
 function check(path, expected) {
   return new Promise((resolve, reject) => {
     http.get(`http://localhost:8080${path}`, (res) => {
@@ -18,10 +19,12 @@ function check(path, expected) {
   });
 }
 
+const basePath = (process.env.BASE_PATH || '/api').replace(/\/$/, '');
+
 Promise.all([
-  check('/api', 'pong'),
-  check('/api/health', 'ok'),
-  check('/api/bestProgrammer', 'ArtemHl')
+  check(`${basePath}/`, 'pong'),
+  check(`${basePath}/health`, 'ok'),
+  check(`${basePath}/bestProgrammer`, 'ArtemHl')
 ])
   .then(() => process.exit(0))
   .catch(() => process.exit(1));
